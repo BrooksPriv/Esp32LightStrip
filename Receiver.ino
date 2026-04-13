@@ -11,7 +11,6 @@ typedef struct struct_message {
 struct_message incomingMessage;
 bool relayState = false;
 
-// ESP-NOW receive callback
 void onDataRecv(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
   memcpy(&incomingMessage, data, sizeof(incomingMessage));
   if (incomingMessage.toggle) {
@@ -41,12 +40,11 @@ void loop() {
   static bool lastState = LOW;
   bool currentState = digitalRead(INPUT_PIN);
 
-  // Detect rising edge from local input
   if (lastState == LOW && currentState == HIGH) {
     relayState = !relayState;
     digitalWrite(RELAY_PIN, relayState ? LOW : HIGH);
     Serial.println("Toggled via local input");
-    delay(200);  // Debounce
+    delay(200);  
   }
 
   lastState = currentState;
